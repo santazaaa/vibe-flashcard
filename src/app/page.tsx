@@ -19,6 +19,7 @@ export default function Home() {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [feedbackType, setFeedbackType] = useState<"success" | "error" | null>(null);
   const [showToast, setShowToast] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // Preset Mandarin flashcards
   const presetCards: Flashcard[] = [
@@ -183,54 +184,6 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="container mx-auto flex flex-col md:flex-row gap-8 justify-center items-start">
-        {/* Card List */}
-        <div className="card w-full md:w-1/2 bg-base-100 shadow-xl p-4">
-          <div className="card-body">
-            <h2 className="card-title flex items-center gap-2">
-              <FaPlus className="text-primary" /> Add New Card
-            </h2>
-            <button
-              className="btn btn-outline btn-accent btn-block gap-2 mb-4"
-              type="button"
-              onClick={handleAddPreset}
-            >
-              <MdLibraryAdd className="text-lg" /> Add Mandarin Preset Cards
-            </button>
-            <form onSubmit={handleAddCard} className="form-control gap-4 mb-6">
-              <input
-                className="input input-bordered input-primary"
-                placeholder="Original word"
-                value={word}
-                onChange={(e) => setWord(e.target.value)}
-                autoFocus
-              />
-              <input
-                className="input input-bordered input-secondary"
-                placeholder="Translation"
-                value={translation}
-                onChange={(e) => setTranslation(e.target.value)}
-              />
-              <button className="btn btn-primary btn-block gap-2" type="submit">
-                <FaPlus /> Add Card
-              </button>
-            </form>
-            <h3 className="card-title">Your Cards</h3>
-            <ul className="menu max-h-60 overflow-y-auto gap-2">
-              {cards.length === 0 && <li className="text-gray-400">No cards yet.</li>}
-              {cards.map((c) => (
-                <li key={c.id} className="card bg-base-200 flex-row flex justify-between items-center hover:bg-primary/10 p-3">
-                  <span>
-                    <span className="text-primary font-bold">{c.word}</span> <span className="text-gray-500">→</span> {c.translation}
-                  </span>
-                  <button className="btn btn-xs btn-error btn-circle" onClick={() => handleRemoveCard(c.id)} title="Remove">
-                    <FaTrash />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
         {/* Practice Area */}
         <div className="card w-full md:w-1/2 bg-base-100 shadow-2xl p-4">
           <div className="card-body flex flex-col items-center gap-4">
@@ -258,6 +211,84 @@ export default function Home() {
             ) : (
               <div className="text-gray-400">Add some cards to start practicing!</div>
             )}
+          </div>
+        </div>
+
+        {/* Card List */}
+        <div className="card w-full md:w-1/2 bg-base-100 shadow-xl p-4">
+          <div className="card-body">
+            <h2 className="card-title flex items-center gap-2">
+              <FaPlus className="text-primary" /> Add New Card
+            </h2>
+            <div className="flex gap-2 mb-4">
+              <button
+                className="btn btn-outline btn-accent flex-1"
+                type="button"
+                onClick={handleAddPreset}
+              >
+                <MdLibraryAdd className="text-lg" /> Add Mandarin Preset Cards
+              </button>
+              <button
+                className="btn btn-primary flex-1"
+                type="button"
+                onClick={() => setShowAddModal(true)}
+              >
+                <FaPlus /> Add Card
+              </button>
+            </div>
+
+            {/* Add Card Modal */}
+            {showAddModal && (
+              <dialog className="modal modal-open">
+                <div className="modal-box">
+                  <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><FaPlus className="text-primary" /> Add New Card</h3>
+                  <form
+                    onSubmit={e => {
+                      handleAddCard(e);
+                      setShowAddModal(false);
+                    }}
+                    className="form-control gap-4"
+                  >
+                    <input
+                      className="input input-bordered input-primary"
+                      placeholder="Original word"
+                      value={word}
+                      onChange={e => setWord(e.target.value)}
+                      autoFocus
+                    />
+                    <input
+                      className="input input-bordered input-secondary"
+                      placeholder="Translation"
+                      value={translation}
+                      onChange={e => setTranslation(e.target.value)}
+                    />
+                    <div className="modal-action">
+                      <button type="button" className="btn" onClick={() => setShowAddModal(false)}>Cancel</button>
+                      <button className="btn btn-primary gap-2" type="submit">
+                        <FaPlus /> Add Card
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <form method="dialog" className="modal-backdrop">
+                  <button onClick={() => setShowAddModal(false)}>close</button>
+                </form>
+              </dialog>
+            )}
+            <h3 className="card-title">Your Cards</h3>
+            <ul className="menu max-h-60 overflow-y-auto gap-2">
+              {cards.length === 0 && <li className="text-gray-400">No cards yet.</li>}
+              {cards.map((c) => (
+                <li key={c.id} className="card bg-base-200 flex flex-row justify-between items-center hover:bg-primary/10 p-3">
+                  <span>
+                    <span className="text-primary font-bold">{c.word}</span> <span className="text-gray-500">→</span> {c.translation}
+                  </span>
+                  <button className="btn btn-xs btn-error btn-circle" onClick={() => handleRemoveCard(c.id)} title="Remove">
+                    <FaTrash />
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </main>
