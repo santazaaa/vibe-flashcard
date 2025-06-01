@@ -49,7 +49,7 @@ export default function Home() {
     if (stored) {
       try {
         setCards(JSON.parse(stored));
-      } catch {}
+      } catch { }
     }
   }, []);
 
@@ -120,14 +120,12 @@ export default function Home() {
     }
   };
 
-  // Show choices for current card
-  const handleShowChoices = () => {
-    if (!currentCard) return;
-    setChoices(getRandomChoices(currentCard.translation));
-    setShowChoices(true);
-    setFeedback(null);
-    setFeedbackType(null);
-  };
+  // Always show choices for the current card
+  useEffect(() => {
+    if (currentCard) {
+      setChoices(getRandomChoices(currentCard.translation));
+    }
+  }, [currentCard, cards]);
 
   // Handle answer
   const handleChoice = (choice: string) => {
@@ -160,15 +158,15 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-base-200 to-primary/10 flex flex-col items-center">
+    <div className="min-h-screen bg-base-100 flex flex-col items-center gap-4 p-4">
       {/* Header Bar */}
-      <div className="navbar bg-base-100 shadow-md mb-8 sticky top-0 z-10 px-6">
-        <div className="flex-1">
+      <div className="navbar bg-base-100 shadow-md sticky top-0 z-10 mb-4">
+        <div className="navbar-start">
           <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary flex items-center gap-2">
             <span role="img" aria-label="flashcard">🃏</span> Vibe Flashcard
           </span>
         </div>
-        <div className="flex-none">
+        <div className="navbar-end">
           <span className="badge badge-primary badge-outline text-xs sm:text-sm">{cards.length} cards</span>
         </div>
       </div>
@@ -184,11 +182,11 @@ export default function Home() {
       )}
 
       {/* Main Content */}
-      <main className="w-full max-w-4xl flex flex-col md:flex-row gap-10 justify-center items-start px-4">
+      <main className="container mx-auto flex flex-col md:flex-row gap-8 justify-center items-start">
         {/* Card List */}
-        <div className="card w-full md:w-1/2 bg-base-100 rounded-2xl shadow-xl mb-8 md:mb-0 animate-fade-in">
+        <div className="card w-full md:w-1/2 bg-base-100 shadow-xl p-4">
           <div className="card-body">
-            <h2 className="card-title text-xl font-bold mb-2 flex items-center gap-2">
+            <h2 className="card-title flex items-center gap-2">
               <FaPlus className="text-primary" /> Add New Card
             </h2>
             <button
@@ -198,16 +196,16 @@ export default function Home() {
             >
               <MdLibraryAdd className="text-lg" /> Add Mandarin Preset Cards
             </button>
-            <form onSubmit={handleAddCard} className="flex flex-col gap-3 mb-4">
+            <form onSubmit={handleAddCard} className="form-control gap-4 mb-6">
               <input
-                className="input input-bordered input-primary w-full"
+                className="input input-bordered input-primary"
                 placeholder="Original word"
                 value={word}
                 onChange={(e) => setWord(e.target.value)}
                 autoFocus
               />
               <input
-                className="input input-bordered input-secondary w-full"
+                className="input input-bordered input-secondary"
                 placeholder="Translation"
                 value={translation}
                 onChange={(e) => setTranslation(e.target.value)}
@@ -216,12 +214,12 @@ export default function Home() {
                 <FaPlus /> Add Card
               </button>
             </form>
-            <h3 className="text-lg font-semibold mb-2">Your Cards</h3>
-            <ul className="space-y-2 max-h-60 overflow-y-auto pr-2">
+            <h3 className="card-title">Your Cards</h3>
+            <ul className="menu max-h-60 overflow-y-auto gap-2">
               {cards.length === 0 && <li className="text-gray-400">No cards yet.</li>}
               {cards.map((c) => (
-                <li key={c.id} className="card bg-base-200 p-3 rounded-lg shadow-sm flex-row flex justify-between items-center transition hover:bg-primary/10">
-                  <span className="font-medium text-base">
+                <li key={c.id} className="card bg-base-200 flex-row flex justify-between items-center hover:bg-primary/10 p-3">
+                  <span>
                     <span className="text-primary font-bold">{c.word}</span> <span className="text-gray-500">→</span> {c.translation}
                   </span>
                   <button className="btn btn-xs btn-error btn-circle" onClick={() => handleRemoveCard(c.id)} title="Remove">
@@ -234,53 +232,41 @@ export default function Home() {
         </div>
 
         {/* Practice Area */}
-        <div className="card w-full md:w-1/2 bg-gradient-to-br from-primary/10 to-base-100 rounded-2xl shadow-2xl animate-fade-in">
-          <div className="card-body flex flex-col items-center">
-            <h2 className="card-title text-xl font-bold mb-4 text-primary">Practice</h2>
+        <div className="card w-full md:w-1/2 bg-base-100 shadow-2xl p-4">
+          <div className="card-body flex flex-col items-center gap-4">
+            <h2 className="card-title">Practice</h2>
             {currentCard ? (
               <>
                 <div
-                  className="card w-full max-w-md bg-primary text-primary-content shadow-2xl mb-6 cursor-pointer transition-transform duration-200 hover:scale-105 animate-fade-in flex items-center justify-center min-h-[120px] text-3xl font-semibold tracking-wide text-center select-none"
-                  onClick={!showChoices ? handleShowChoices : undefined}
+                  className="card w-full bg-primary text-primary-content shadow-2xl mb-4 flex items-center justify-center min-h-[120px] text-3xl text-center select-none p-6"
                   style={{ minHeight: 120 }}
                 >
                   {currentCard.word}
                 </div>
-                {showChoices && (
-                  <div className="flex flex-col gap-3 w-full animate-fade-in">
-                    {choices.map((choice) => (
-                      <button
-                        key={choice}
-                        className="btn btn-outline btn-lg w-full transition-colors duration-150 hover:btn-primary"
-                        onClick={() => handleChoice(choice)}
-                      >
-                        {choice}
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {!showChoices && (
-                  <div className="text-gray-400 text-sm mt-2">Click the card to show choices</div>
-                )}
+                <div className="form-control w-full gap-3">
+                  {choices.map((choice) => (
+                    <button
+                      key={choice}
+                      className="btn btn-outline btn-lg w-full hover:btn-primary"
+                      onClick={() => handleChoice(choice)}
+                    >
+                      {choice}
+                    </button>
+                  ))}
+                </div>
               </>
             ) : (
-              <div className="text-gray-400 text-lg">Add some cards to start practicing!</div>
+              <div className="text-gray-400">Add some cards to start practicing!</div>
             )}
           </div>
         </div>
       </main>
-      <footer className="mt-12 mb-4 text-center text-gray-400 text-xs">
-        &copy; {new Date().getFullYear()} Vibe Flashcard. Made with <span className="text-pink-500">♥</span> and Next.js.
+
+      <footer className="footer bg-base-300 text-base-content p-4 flex justify-center items-center">
+        <aside className="flex items-center gap-1">
+          &copy; {new Date().getFullYear()} Vibe Flashcard. Made with <span className="text-pink-500">♥</span> and Next.js.
+        </aside>
       </footer>
-      <style jsx global>{`
-        .animate-fade-in {
-          animation: fadeIn 0.7s;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }
