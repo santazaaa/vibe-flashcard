@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { FaPlus, FaTrash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { MdLibraryAdd } from "react-icons/md";
 
@@ -14,7 +14,6 @@ export default function Home() {
   const [word, setWord] = useState("");
   const [translation, setTranslation] = useState("");
   const [currentCard, setCurrentCard] = useState<Flashcard | null>(null);
-  const [showChoices, setShowChoices] = useState(false);
   const [choices, setChoices] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [feedbackType, setFeedbackType] = useState<"success" | "error" | null>(null);
@@ -67,12 +66,12 @@ export default function Home() {
   };
 
   // Helper to get random choices
-  const getRandomChoices = (correct: string) => {
+  const getRandomChoices = useCallback((correct: string) => {
     const translations = cards.map((c) => c.translation).filter((t) => t !== correct);
     const shuffled = translations.sort(() => 0.5 - Math.random()).slice(0, 3);
     const allChoices = [...shuffled, correct].sort(() => 0.5 - Math.random());
     return allChoices;
-  };
+  }, [cards]);
 
   // Add card
   const handleAddCard = (e: React.FormEvent) => {
@@ -115,7 +114,6 @@ export default function Home() {
     setCards((prev) => prev.filter((c) => c.id !== id));
     if (currentCard && currentCard.id === id) {
       setCurrentCard(getRandomCard(id));
-      setShowChoices(false);
       setFeedback(null);
       setFeedbackType(null);
     }
@@ -126,7 +124,7 @@ export default function Home() {
     if (currentCard) {
       setChoices(getRandomChoices(currentCard.translation));
     }
-  }, [currentCard, cards]);
+  }, [currentCard, cards, getRandomChoices]);
 
   // Handle answer
   const handleChoice = (choice: string) => {
@@ -138,7 +136,6 @@ export default function Home() {
       setTimeout(() => {
         const next = getRandomCard(currentCard.id);
         setCurrentCard(next);
-        setShowChoices(false);
         setFeedback(null);
         setFeedbackType(null);
         setShowToast(false);
@@ -185,13 +182,13 @@ export default function Home() {
       {/* Main Content */}
       <main className="container mx-auto flex flex-col md:flex-row gap-8 justify-center items-start">
         {/* Practice Area */}
-        <div className="card w-full md:w-1/2 bg-base-100 shadow-2xl p-4">
+        <div className="card w-full md:w-1/2 bg-base-100 p-4">
           <div className="card-body flex flex-col items-center gap-4">
             <h2 className="card-title">Practice</h2>
             {currentCard ? (
               <>
                 <div
-                  className="card w-full bg-primary text-primary-content shadow-2xl mb-4 flex items-center justify-center min-h-[120px] text-3xl text-center select-none p-6"
+                  className="card w-full bg-primary text-primary-content mb-4 flex items-center justify-center min-h-[120px] text-3xl text-center select-none p-6"
                   style={{ minHeight: 120 }}
                 >
                   {currentCard.word}
@@ -215,7 +212,7 @@ export default function Home() {
         </div>
 
         {/* Card List */}
-        <div className="card w-full md:w-1/2 bg-base-100 shadow-xl p-4">
+        <div className="card w-full md:w-1/2 bg-base-100 p-4">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
               <FaPlus className="text-primary" /> Add New Card
@@ -293,7 +290,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="footer bg-base-300 text-base-content p-4 flex justify-center items-center">
+      <footer className="footer bg-base-300 text-base-content p-4 flex justify-center items-center sticky bottom-0">
         <aside className="flex items-center gap-1">
           &copy; {new Date().getFullYear()} Vibe Flashcard. Made with <span className="text-pink-500">♥</span> and Next.js.
         </aside>
