@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { FaPlus, FaTrash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { MdLibraryAdd } from "react-icons/md";
+import { getPresetCards, Flashcard as PresetFlashcard } from "./PresetCards";
 
 interface Flashcard {
   id: number;
@@ -20,28 +21,8 @@ export default function Home() {
   const [showToast, setShowToast] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  // Preset Mandarin flashcards
-  const presetCards: Flashcard[] = [
-    { id: 10001, word: "你好 (nǐ hǎo)", translation: "Hello" },
-    { id: 10002, word: "谢谢 (xiè xie)", translation: "Thank you" },
-    { id: 10003, word: "再见 (zài jiàn)", translation: "Goodbye" },
-    { id: 10004, word: "请 (qǐng)", translation: "Please" },
-    { id: 10005, word: "对不起 (duì bu qǐ)", translation: "Sorry" },
-    { id: 10006, word: "是 (shì)", translation: "Yes/To be" },
-    { id: 10007, word: "不是 (bú shì)", translation: "No/Not to be" },
-    { id: 10008, word: "我 (wǒ)", translation: "I/Me" },
-    { id: 10009, word: "你 (nǐ)", translation: "You" },
-    { id: 10010, word: "他 (tā)", translation: "He/Him" },
-    { id: 10011, word: "她 (tā)", translation: "She/Her" },
-    { id: 10012, word: "我们 (wǒ men)", translation: "We/Us" },
-    { id: 10013, word: "他们 (tā men)", translation: "They/Them" },
-    { id: 10014, word: "好 (hǎo)", translation: "Good" },
-    { id: 10015, word: "不好 (bù hǎo)", translation: "Not good" },
-    { id: 10016, word: "中国 (Zhōng guó)", translation: "China" },
-    { id: 10017, word: "美国 (Měi guó)", translation: "USA" },
-    { id: 10018, word: "老师 (lǎo shī)", translation: "Teacher" },
-    { id: 10019, word: "学生 (xué shēng)", translation: "Student" },
-  ];
+  // Get preset Mandarin flashcards from JSON
+  const presetCards: PresetFlashcard[] = getPresetCards();
 
   // Load cards from localStorage on mount
   useEffect(() => {
@@ -238,29 +219,41 @@ export default function Home() {
             {showAddModal && (
               <dialog className="modal modal-open">
                 <div className="modal-box">
-                  <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><FaPlus className="text-primary" /> Add New Card</h3>
+                  <h3 className="font-bold text-lg mb-2 flex items-center gap-2"><FaPlus className="text-primary" /> Add New Card</h3>
+                  <p className="text-sm text-gray-500 mb-4">Fill in the original word and its translation to add a new flashcard.</p>
                   <form
                     onSubmit={e => {
                       handleAddCard(e);
                       setShowAddModal(false);
                     }}
-                    className="form-control gap-4"
+                    className="form-control gap-6"
                   >
-                    <input
-                      className="input input-bordered input-primary"
-                      placeholder="Original word"
-                      value={word}
-                      onChange={e => setWord(e.target.value)}
-                      autoFocus
-                    />
-                    <input
-                      className="input input-bordered input-secondary"
-                      placeholder="Translation"
-                      value={translation}
-                      onChange={e => setTranslation(e.target.value)}
-                    />
-                    <div className="modal-action">
-                      <button type="button" className="btn" onClick={() => setShowAddModal(false)}>Cancel</button>
+                    <div className="flex flex-col gap-2 mb-4">
+                      <label htmlFor="word" className="label text-base-content">Original word</label>
+                      <input
+                        id="word"
+                        className="input input-bordered input-primary text-lg"
+                        placeholder="e.g. 你好 (nǐ hǎo)"
+                        value={word}
+                        onChange={e => setWord(e.target.value)}
+                        autoFocus
+                        required
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 mb-4">
+                      <label htmlFor="translation" className="label text-base-content">Translation</label>
+                      <input
+                        id="translation"
+                        className="input input-bordered input-secondary text-lg"
+                        placeholder="e.g. Hello"
+                        value={translation}
+                        onChange={e => setTranslation(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="divider my-0 mb-4" />
+                    <div className="modal-action flex gap-2 justify-end">
+                      <button type="button" className="btn btn-ghost" onClick={() => setShowAddModal(false)}>Cancel</button>
                       <button className="btn btn-primary gap-2" type="submit">
                         <FaPlus /> Add Card
                       </button>
