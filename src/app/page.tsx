@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaPlus, FaTrash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { MdLibraryAdd } from "react-icons/md";
 
@@ -42,6 +42,21 @@ export default function Home() {
     { id: 10018, word: "老师 (lǎo shī)", translation: "Teacher" },
     { id: 10019, word: "学生 (xué shēng)", translation: "Student" },
   ];
+
+  // Load cards from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("flashcards");
+    if (stored) {
+      try {
+        setCards(JSON.parse(stored));
+      } catch {}
+    }
+  }, []);
+
+  // Save cards to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("flashcards", JSON.stringify(cards));
+  }, [cards]);
 
   // Helper to get a random card
   const getRandomCard = (excludeId?: number) => {
