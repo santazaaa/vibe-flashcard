@@ -1,5 +1,6 @@
 import Ad from "./Ad";
 import { useFlashcardStore } from "../store/flashcardStore";
+import { ADSENSE_CONFIG } from "../config/adsense";
 
 interface HeaderProps {
   cardCount: number;
@@ -16,7 +17,7 @@ export default function Header({ cardCount }: HeaderProps) {
         </span>
       </div>
       <div className="navbar-center hidden md:flex">
-        <Ad slot="HEADER_BANNER_SLOT" format="horizontal" className="w-full max-w-xs" />
+        <Ad slot={ADSENSE_CONFIG.adUnits.headerBanner} format="horizontal" className="w-full max-w-xs" />
       </div>
       <div className="navbar-end flex items-center gap-2">
         <div className="dropdown dropdown-end">

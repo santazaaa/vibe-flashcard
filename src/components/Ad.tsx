@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { ADSENSE_CONFIG } from "../config/adsense";
 
 declare global {
   interface Window {
@@ -33,7 +34,7 @@ export default function Ad({ slot, format = "auto", responsive = true, className
       <ins
         className={`adsbygoogle ${className}`}
         style={{ display: "block" }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+        data-ad-client={ADSENSE_CONFIG.publisherId}
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive.toString()}
