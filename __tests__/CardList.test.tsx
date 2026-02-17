@@ -22,7 +22,26 @@ describe('CardList', () => {
   it('calls onOpenAddModal when add card button clicked', () => {
     const mockOpen = jest.fn()
     render(<CardList cards={mockCards} onAddPreset={() => {}} onRemoveCard={() => {}} onOpenAddModal={mockOpen} />)
-    fireEvent.click(screen.getByText('Add Card'))
+    fireEvent.click(screen.getByRole('button', { name: /Add New Card/ }))
     expect(mockOpen).toHaveBeenCalled()
+  })
+
+  it('calls onAddPreset when Spanish button clicked', () => {
+    const mockAddPreset = jest.fn()
+    render(<CardList cards={[]} onAddPreset={mockAddPreset} onRemoveCard={() => {}} onOpenAddModal={() => {}} />)
+    fireEvent.click(screen.getByText('Spanish'))
+    expect(mockAddPreset).toHaveBeenCalledWith('spanish')
+  })
+
+  it('calls onRemoveCard when remove button clicked', () => {
+    const mockRemove = jest.fn()
+    render(<CardList cards={mockCards} onAddPreset={() => {}} onRemoveCard={mockRemove} onOpenAddModal={() => {}} />)
+    fireEvent.click(screen.getAllByTitle('Remove')[0])
+    expect(mockRemove).toHaveBeenCalledWith(1)
+  })
+
+  it('renders ad component', () => {
+    render(<CardList cards={mockCards} onAddPreset={() => {}} onRemoveCard={() => {}} onOpenAddModal={() => {}} />)
+    expect(document.querySelector('.adsbygoogle')).toBeInTheDocument()
   })
 })

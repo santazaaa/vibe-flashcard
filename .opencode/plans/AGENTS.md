@@ -8,7 +8,7 @@ This file provides guidelines for agentic coding agents (e.g., opencode with Git
 - **Production Build**: `npm run build` (builds the app for production).
 - **Production Start**: `npm run start` (starts the built production app).
 - **Linting**: `npm run lint` (runs ESLint with Next.js core-web-vitals and TypeScript rules).
-- **Testing**: No test scripts or frameworks configured. There are no existing tests, so run `npm run lint` for basic checks. For single-test runs: N/A (add Jest or similar if needed).
+- **Testing**: `npm run test` (runs Jest with jsdom; includes @testing-library for React components). For coverage: `npm run test -- --coverage` (target: >80% statements/branches/functions/lines). Single-test runs: `npm run test -- <test-file>`.
 
 ## Code Style Guidelines
 
@@ -65,7 +65,7 @@ Follow these conventions to maintain consistency. Enforce with `npm run lint` an
 ## Additional Rules
 - No Cursor or Copilot-specific rules found (no `.cursorrules`, `.cursor/rules/`, or `.github/copilot-instructions.md`).
 - Follow Next.js best practices; keep code simple for a client-side app.
-- For changes, run `npm run lint` and `npm run build` to verify.
+- For changes, run `npm run lint`, `npm run test -- --coverage`, and `npm run build` to verify. Ensure test coverage >80% (statements, branches, functions, lines); add tests for new features.
 - Commit conventions: Use conventional commits (e.g., `feat: add new feature`, `fix: resolve bug`, `refactor: improve code structure`, `test: add unit tests`). Include scope if relevant (e.g., `feat(auth): implement login`).
 - After implementation, always update remaining and completed tasks in plans/*.md files.
 - Commit after completing a todo/feature; ask user to confirm first before commit.
