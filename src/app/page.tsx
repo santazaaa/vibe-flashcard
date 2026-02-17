@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getPresetCards, Flashcard as PresetFlashcard } from "./PresetCards";
+import { getPresetCards } from "./PresetCards";
 import { useFlashcardStore } from "../store/flashcardStore";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -26,9 +26,6 @@ export default function Home() {
     getRandomChoices,
     incrementReviewed,
   } = useFlashcardStore();
-
-  // Get preset Mandarin flashcards from JSON
-  const presetCards: PresetFlashcard[] = getPresetCards();
 
   // Modal state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -56,12 +53,13 @@ export default function Home() {
   };
 
   // Add preset cards
-  const handleAddPreset = () => {
+  const handleAddPreset = (language: string) => {
+    const presetCards = getPresetCards(language as 'mandarin' | 'spanish' | 'french');
     addPresetCards(presetCards);
     if (!currentCard && presetCards.length > 0) {
       setCurrentCard(presetCards[0]);
     }
-    setFeedback("Preset cards added!");
+    setFeedback(`${language.charAt(0).toUpperCase() + language.slice(1)} cards added!`);
     setFeedbackType("success");
     setShowToast(true);
     setTimeout(() => setShowToast(false), 1200);

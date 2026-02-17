@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "word": "bonjour",
+    "translation": "hello"
+  },
+  {
+    "id": 2,
+    "word": "merci",
+    "translation": "thank you"
+  },
+  {
+    "id": 3,
+    "word": "s'il vous plaît",
+    "translation": "please"
+  },
+  {
+    "id": 4,
+    "word": "au revoir",
+    "translation": "goodbye"
+  },
+  {
+    "id": 5,
+    "word": "oui",
+    "translation": "yes"
+  },
+  {
+    "id": 6,
+    "word": "non",
+    "translation": "no"
+  },
+  {
+    "id": 7,
+    "word": "eau",
+    "translation": "water"
+  },
+  {
+    "id": 8,
+    "word": "nourriture",
+    "translation": "food"
+  }
+]

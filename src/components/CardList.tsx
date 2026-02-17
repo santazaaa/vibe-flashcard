@@ -10,7 +10,7 @@ interface Flashcard {
 
 interface CardListProps {
   cards: Flashcard[];
-  onAddPreset: () => void;
+  onAddPreset: (language: string) => void;
   onRemoveCard: (id: number) => void;
   onOpenAddModal: () => void;
 }
@@ -26,16 +26,30 @@ export default function CardList({ cards, onAddPreset, onRemoveCard, onOpenAddMo
           <button
             className="btn btn-outline btn-accent flex-1"
             type="button"
-            onClick={onAddPreset}
+            onClick={() => onAddPreset('mandarin')}
           >
-            <MdLibraryAdd className="text-lg" /> Add Mandarin Preset Cards
+            <MdLibraryAdd className="text-lg" /> Mandarin
+          </button>
+          <button
+            className="btn btn-outline btn-secondary flex-1"
+            type="button"
+            onClick={() => onAddPreset('spanish')}
+          >
+            <MdLibraryAdd className="text-lg" /> Spanish
+          </button>
+          <button
+            className="btn btn-outline btn-info flex-1"
+            type="button"
+            onClick={() => onAddPreset('french')}
+          >
+            <MdLibraryAdd className="text-lg" /> French
           </button>
           <button
             className="btn btn-primary flex-1"
             type="button"
             onClick={onOpenAddModal}
           >
-            <FaPlus /> Add Card
+            <FaPlus /> Custom
           </button>
         </div>
 

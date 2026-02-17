@@ -25,8 +25,9 @@ This document outlines prioritized features to support monetization via Google A
    - Add auth for saving cards/decks online.
    - Why: Personalized decks; users return daily.
 
-5. **Enhanced Presets and Customization**
-   - Add more language presets; custom deck creation.
+5. **Enhanced Presets and Customization** (Completed)
+   - Added preset options for Mandarin, Spanish, French with JSON files.
+   - Updated CardList with language buttons; dynamic loading via getPresetCards.
 
 6. **Basic Analytics/Tracking**
    - Integrate Plausible or Google Analytics.
