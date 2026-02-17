@@ -8,20 +8,34 @@ interface QuizAreaProps {
   currentCard: Flashcard | null;
   choices: string[];
   onChoice: (choice: string) => void;
+  reviewedCount: number;
+  streak: number;
+  quizMode: 'normal' | 'reverse';
 }
 
-export default function QuizArea({ currentCard, choices, onChoice }: QuizAreaProps) {
+export default function QuizArea({ currentCard, choices, onChoice, reviewedCount, streak, quizMode }: QuizAreaProps) {
   return (
     <div className="card w-full md:w-1/2 bg-base-100 p-4">
       <div className="card-body flex flex-col items-center gap-4">
         <h2 className="card-title">Practice</h2>
+        <div className="stats stats-vertical lg:stats-horizontal shadow w-full">
+          <div className="stat">
+            <div className="stat-title">Cards Reviewed</div>
+            <div className="stat-value text-primary">{reviewedCount}</div>
+          </div>
+          <div className="stat">
+            <div className="stat-title">Streak</div>
+            <div className="stat-value text-secondary">{streak}</div>
+            <div className="stat-desc">days in a row</div>
+          </div>
+        </div>
         {currentCard ? (
           <>
             <div
               className="card w-full bg-primary text-primary-content mb-4 flex items-center justify-center min-h-[120px] text-3xl text-center select-none p-6"
               style={{ minHeight: 120 }}
             >
-              {currentCard.word}
+              {quizMode === 'normal' ? currentCard.word : currentCard.translation}
             </div>
             <div className="form-control w-full gap-3">
               {choices.map((choice) => (

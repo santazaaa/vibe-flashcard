@@ -14,6 +14,9 @@ export default function Home() {
     cards,
     currentCard,
     choices,
+    reviewedCount,
+    streak,
+    quizMode,
     addCard,
     removeCard,
     addPresetCards,
@@ -21,6 +24,7 @@ export default function Home() {
     setChoices,
     getRandomCard,
     getRandomChoices,
+    incrementReviewed,
   } = useFlashcardStore();
 
   // Get preset Mandarin flashcards from JSON
@@ -71,7 +75,9 @@ export default function Home() {
   // Handle answer
   const handleChoice = (choice: string) => {
     if (!currentCard) return;
-    if (choice === currentCard.translation) {
+    const correct = quizMode === 'normal' ? currentCard.translation : currentCard.word;
+    if (choice === correct) {
+      incrementReviewed();
       setFeedback("Correct!");
       setFeedbackType("success");
       setShowToast(true);
@@ -111,7 +117,7 @@ export default function Home() {
       <ToastNotification show={showToast} feedback={feedback} feedbackType={feedbackType} />
 
       <main className="container mx-auto flex flex-col md:flex-row gap-8 justify-center items-start">
-        <QuizArea currentCard={currentCard} choices={choices} onChoice={handleChoice} />
+        <QuizArea currentCard={currentCard} choices={choices} onChoice={handleChoice} reviewedCount={reviewedCount} streak={streak} quizMode={quizMode} />
         <CardList cards={cards} onAddPreset={handleAddPreset} onRemoveCard={handleRemoveCard} onOpenAddModal={() => setShowAddModal(true)} />
       </main>
 

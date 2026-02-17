@@ -68,3 +68,4 @@ Follow these conventions to maintain consistency. Enforce with `npm run lint` an
 - For changes, run `npm run lint` and `npm run build` to verify.
 - Commit conventions: Use conventional commits (e.g., `feat: add new feature`, `fix: resolve bug`, `refactor: improve code structure`, `test: add unit tests`). Include scope if relevant (e.g., `feat(auth): implement login`).
 - After implementation, always update remaining and completed tasks in plans/*.md files.
+- Commit after completing a todo/feature; ask user to confirm first before commit.

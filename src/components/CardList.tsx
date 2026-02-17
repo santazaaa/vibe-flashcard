@@ -1,5 +1,6 @@
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { MdLibraryAdd } from "react-icons/md";
+import Ad from "./Ad";
 
 interface Flashcard {
   id: number;
@@ -37,6 +38,8 @@ export default function CardList({ cards, onAddPreset, onRemoveCard, onOpenAddMo
             <FaPlus /> Add Card
           </button>
         </div>
+
+        <Ad slot="SIDEBAR_RECTANGLE_SLOT" format="rectangle" className="mb-4" />
 
         <h3 className="card-title">Your Cards</h3>
         <ul className="menu max-h-60 overflow-y-auto gap-2">
