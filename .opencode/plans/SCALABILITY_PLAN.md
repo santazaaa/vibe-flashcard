@@ -11,13 +11,13 @@ The app started as a monolithic single-page Next.js app with localStorage. The g
 - **State Management with Zustand**: Created `flashcardStore.ts` with actions for cards, presets, and quiz state; added persist middleware for localStorage.
 - **State Migration**: Replaced local useState with Zustand store.
 - **API Routes**: Added `src/app/api/cards/route.ts` for CRUD (removed as unused placeholder).
+- **Testing Setup**: Installed Jest + React Testing Library and Playwright.
+- **Write Tests**: Added unit tests for components (QuizArea, CardList) and store (flashcardStore).
 
 ## Remaining Tasks
 - **Supabase Integration**: Connect to Supabase for database, auth, and shared decks.
 - **Routing and Pages**: Implement App Router pages (`/dashboard`, `/decks`, `/decks/[id]`, `/modes/[mode]`).
 - **Navigation and Auth**: Add navbar, breadcrumbs, and middleware for protected routes.
-- **Testing Setup**: Install Jest + React Testing Library and Playwright.
-- **Write Tests**: Add unit/component tests and E2E tests for core features.
 - **Performance Optimizations**: Add memoization, lazy loading, virtualization.
 
 ## Priorities
