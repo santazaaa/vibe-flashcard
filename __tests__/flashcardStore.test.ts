@@ -3,22 +3,23 @@ import { useFlashcardStore } from '../src/store/flashcardStore'
 describe('Flashcard Store', () => {
   beforeEach(() => {
     // Reset store before each test
-    const { cards, setCurrentCard, setChoices } = useFlashcardStore.getState()
-    // Clear persisted state if any
+    useFlashcardStore.setState({ cards: [], currentCard: null, choices: [] })
     localStorage.clear()
   })
 
   it('adds a card', () => {
-    const { addCard, cards } = useFlashcardStore.getState()
+    const { addCard } = useFlashcardStore.getState()
     addCard({ id: 1, word: 'Test', translation: 'Prueba' })
+    const { cards } = useFlashcardStore.getState()
     expect(cards).toHaveLength(1)
     expect(cards[0].word).toBe('Test')
   })
 
   it('removes a card', () => {
-    const { addCard, removeCard, cards } = useFlashcardStore.getState()
+    const { addCard, removeCard } = useFlashcardStore.getState()
     addCard({ id: 1, word: 'Test', translation: 'Prueba' })
     removeCard(1)
+    const { cards } = useFlashcardStore.getState()
     expect(cards).toHaveLength(0)
   })
 
