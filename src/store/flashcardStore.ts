@@ -52,7 +52,9 @@ export const useFlashcardStore = create<FlashcardState>()(
         set((state) => {
           const existing = new Set(state.cards.map(c => c.word + c.translation));
           const filtered = newCards.filter(c => !existing.has(c.word + c.translation));
-          return { cards: [...state.cards, ...filtered] };
+          const maxId = state.cards.length > 0 ? Math.max(...state.cards.map(c => c.id)) : 0;
+          const withNewIds = filtered.map((c, idx) => ({ ...c, id: maxId + idx + 1 }));
+          return { cards: [...state.cards, ...withNewIds] };
         }),
 
       setCurrentCard: (card) => set({ currentCard: card }),

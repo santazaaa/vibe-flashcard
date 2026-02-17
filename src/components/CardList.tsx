@@ -71,7 +71,7 @@ export default function CardList({ cards, onAddPreset, onRemoveCard, onOpenAddMo
         <ul className="menu max-h-60 overflow-y-auto gap-2">
           {cards.length === 0 && <li className="text-gray-400">No cards yet.</li>}
           {cards.map((c) => (
-            <li key={c.id} className="card bg-base-200 flex flex-row justify-between items-center hover:bg-primary/10 p-3">
+            <li key={`${c.id}-${c.word}-${c.translation}`} className="card bg-base-200 flex flex-row justify-between items-center hover:bg-primary/10 p-3">
               <span>
                 <span className="text-primary font-bold">{c.word}</span> <span className="text-gray-500">→</span> {c.translation}
               </span>
